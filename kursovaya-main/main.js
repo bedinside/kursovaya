@@ -66,7 +66,7 @@ var mineBlock = (blockData) => {
     var nextHash = calculateHash(nextIndex, previousBlock.hash, nextTimestamp,
     blockData, nonce);
     while ( 
-        parseInt(nextHash, 10) % 5 !== 0
+        parseInt(nextHash, 10) % 41 !== 0
     ){
         nonce++;
         nextTimestamp = new Date().getTime() / 1000;
@@ -162,7 +162,7 @@ var calculateHashForBlock = (block) => {
     block.data, block.nonce);
 };
 var calculateHash = (index, previousHash, timestamp, data, nonce) => {
-    return Math.round(Math.sin(index) +  Math.log(nonce));
+    return (Math.round(Math.sqrt((Math.abs(Math.sin(index))) + Math.log10(nonce*nonce)) * nonce ) ).toString();
 };
 var addBlock = (newBlock) => {
     if (isValidNewBlock(newBlock, getLatestBlock())) {
@@ -220,4 +220,5 @@ var broadcast = (message) => sockets.forEach(socket => write(socket, message));
 connectToPeers(initialPeers);
 initHttpServer();
 initP2PServer();
-//$env:HTTP_PORT=3002; $env:P2P_PORT=6002; $env:PEERS="ws://213.208.174.39"; npm start
+// $env:HTTP_PORT=3001; $env:P2P_PORT=6001; npm start
+// $env:HTTP_PORT=3002; $env:P2P_PORT=6002; $env:PEERS="ws://213.208.174.68:6001"; npm start
